@@ -3,11 +3,9 @@ import { useForm } from "react-hook-form";
 import { Link, Route, Routes, useMatch, useNavigate } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import styled from "styled-components";
-import { inherits } from "util";
-import { getAllBorders } from "../api";
 import { usernameAtom } from "../state/userAtom";
 import BordersPage from "./BordersPage";
-import CreateBorder from "./CreateBorder";
+import CreateBorder, { CREATE_BORDER_PATH } from "./CreateBorder";
 import { LOGIN_PATH } from "./Login";
 
 export const BORDER_PATH = "/border";
@@ -106,6 +104,8 @@ function BorderPage() {
       <CreateButtonBox>
         <CreateButton to="create">Create Post</CreateButton>
       </CreateButtonBox>
+
+      <div>categorys</div>
 
       <Routes>
         <Route path="create" element={<CreateBorder />} />

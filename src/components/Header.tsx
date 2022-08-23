@@ -3,6 +3,7 @@ import { useRecoilValue } from "recoil";
 import styled from "styled-components";
 import { JOIN_PATH } from "../screen/Join";
 import { LOGIN_PATH } from "../screen/Login";
+import { LOGOUT_PATH } from "../screen/Logout";
 import { usernameAtom } from "../state/userAtom";
 
 const HeaderContainer = styled.header`
@@ -21,7 +22,6 @@ const Item = styled.li`
 
 function Header() {
   const username = useRecoilValue(usernameAtom);
-  console.log(username);
 
   return (
     <HeaderContainer>
@@ -31,7 +31,7 @@ function Header() {
         </Item>
         {username !== null ? (
           <Item>
-            <Link to={LOGIN_PATH}>Logout</Link>
+            <Link to={LOGOUT_PATH}>Logout</Link>
           </Item>
         ) : (
           <>

@@ -7,6 +7,7 @@ import { postUserInfo } from "../api";
 import { BottomNav } from "../components/user/BottomNav";
 import { Form } from "../components/user/Form";
 import { Input } from "../components/user/Input";
+import { LOGIN_PATH } from "./Login";
 
 const Container = styled.div`
   display: flex;
@@ -24,16 +25,23 @@ export interface IJoinInfo {
 }
 export const JOIN_PATH = "/join";
 function Join() {
-  const { handleSubmit, register } = useForm<IJoinInfo>();
+  const { handleSubmit, register, getValues } = useForm<IJoinInfo>();
+
   const nav = useNavigate();
 
   const onValid = async (event: IJoinInfo) => {
+    const { email, password } = getValues();
     try {
       const response = await postUserInfo(event);
 
       console.log(response.statues);
 
-      nav("/login");
+      nav(LOGIN_PATH, {
+        state: {
+          email,
+          password,
+        },
+      });
     } catch (error) {
       nav("/");
     }
@@ -41,24 +49,14 @@ function Join() {
   return (
     <Container>
       <Form onSubmit={handleSubmit(onValid)}>
+        <Input {...register("email")} placeholder="email" />
+        <Input {...register("name")} placeholder="name" />
         <Input
-          // value={"visionwill@naver.com"}
-          {...register("email")}
-          placeholder="email"
-        />
-        <Input
-          // value={"wonjongseo"}
-          {...register("name")}
-          placeholder="name"
-        />
-        <Input
-          // value={"a1234"}
           {...register("password")}
           placeholder="password"
           type={"password"}
         />
         <Input
-          //   value={"a1234"}
           {...register("password2")}
           placeholder="password"
           type={"password"}
@@ -66,7 +64,7 @@ function Join() {
         <button>Join</button>
       </Form>
       <BottomNav>
-        <Link to="/login">이미 회원가입 하셨습니까 ? &rarr;</Link>
+        <Link to={LOGIN_PATH}>もう会員でございますか&rarr;</Link>
       </BottomNav>
     </Container>
   );

@@ -4,40 +4,23 @@ import { useNavigate } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import styled from "styled-components";
 import { postBorder } from "../api";
+import BorderButton from "../components/border/BorderButton";
+import BorderForm from "../components/border/BorderForm";
+import BorderTextArea from "../components/border/BorderTextArea";
 import { baseButtonColor } from "../pallet";
 import { usernameAtom } from "../state/userAtom";
 import { LOGIN_PATH } from "./Login";
 
-const Form = styled.form`
-  margin-top: 20px 0px;
-  display: grid;
-  row-gap: 5px;
-`;
-
-const Button = styled.button`
-  font-size: 20px;
-  padding: 15px 100px;
-  border-radius: 20px;
-  border: none;
-  color: white;
-  background-color: ${baseButtonColor};
-`;
-
 const Select = styled.select``;
 
-const TextArea = styled.textarea`
-  height: 50vh;
-  font-size: 16px;
-  resize: none;
-`;
-export interface IBorder {
+export interface ICreateBorder {
   category: string;
   title: string;
   content: string;
 }
-
-function CreatePost() {
-  const { register, handleSubmit } = useForm<IBorder>();
+export const CREATE_BORDER_PATH = "border/create";
+function CreateBorder() {
+  const { register, handleSubmit } = useForm<ICreateBorder>();
   const username = useRecoilValue(usernameAtom);
   const nav = useNavigate();
 
@@ -49,7 +32,7 @@ function CreatePost() {
     }
   }, []);
 
-  const onValid = async (data: IBorder) => {
+  const onValid = async (data: ICreateBorder) => {
     console.log(data.content);
 
     const reponse = await postBorder(data);
@@ -59,25 +42,25 @@ function CreatePost() {
   };
 
   return (
-    <Form onSubmit={handleSubmit(onValid)}>
-      <Select {...register("category")} defaultValue="category">
+    <BorderForm onSubmit={handleSubmit(onValid)}>
+      <Select {...register("category")} defaultValue="日本語授業">
         <option value="category" disabled>
-          게시판을 선택해주세요
+          カテゴリーを選んでください。
         </option>
-        <option value={"일본어 수업"}>일본어 수업</option>
-        <option value={"IT 수업"}>IT 수업</option>
+        <option value={"日本語授業"}>日本語授業</option>
+        <option value={"IT授業"}>IT授業</option>
       </Select>
       <input {...register("title")} placeholder="title" />
-      <TextArea
+      <BorderTextArea
         {...register("content")}
         placeholder="content"
         wrap="hard"
         rows={2}
         cols={20}
-      ></TextArea>
-      <Button>提出</Button>
-    </Form>
+      ></BorderTextArea>
+      <BorderButton>提出</BorderButton>
+    </BorderForm>
   );
 }
 
-export default CreatePost;
+export default CreateBorder;

@@ -8,6 +8,7 @@ export const LOGOUT_PATH = "/logout";
 
 function Logout() {
   const nav = useNavigate();
+
   const setUsername = useSetRecoilState(usernameAtom);
   useEffect(() => {
     sessionStorage.removeItem("username");

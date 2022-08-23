@@ -8,6 +8,7 @@ import { Form } from "../components/user/Form";
 import { Input } from "../components/user/Input";
 import { usernameAtom } from "../state/userAtom";
 import { HOME_PATH } from "./Home";
+import { JOIN_PATH } from "./Join";
 
 const Container = styled.div`
   display: flex;
@@ -26,6 +27,8 @@ export const LOGIN_PATH = "/login";
 interface LocationState {
   state: {
     error?: string;
+    email?: string;
+    password?: string;
   };
 }
 
@@ -51,13 +54,12 @@ function Login() {
       )}
       <Form onSubmit={handleSubmit(onValid)}>
         <Input
-          value={"visionwill@naver.com"}
+          value={location.state?.email}
           {...register("email")}
           placeholder="email"
           type={"text"}
         />
         <Input
-          value={"a1234"}
           {...register("password")}
           placeholder="password"
           type={"password"}
@@ -65,7 +67,7 @@ function Login() {
         <button>Login</button>
       </Form>
       <BottomNav>
-        <Link to={"/join"}>회원가입 하시겠습니까? &rarr;</Link>
+        <Link to={JOIN_PATH}>会員加入をしに行きますか &rarr;</Link>
       </BottomNav>
     </Container>
   );
