@@ -1,46 +1,48 @@
-# Getting Started with Create React App
+개인프로젝트 : 게시판
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+수행 기간: 2주차
 
-## Available Scripts
+수행 목적:
+. 프로젝트 싸이클의 진행을 실전을 통해 경험해 본다.
+. 개인의 역량을 점검한다.
 
-In the project directory, you can run:
+평가 내용:
+. 업무 우선 순위를 파악하여 업무를 수행 하는가.
+. 주어진 기간내에 과제를 수행하는가.
+. 기능과 사용 기술의 완성도는 어떻한가.
 
-### `npm start`
+평가 방법:
+. 요구 사항으로 분석서 작성(txt 또는 ppt 2장 이내).
+. 시연 및 발표.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+요구사항:
+. 분석서에는 구현한 기능과 그 개요, 사용한 언어와 툴 등을 설명한다(txt 또는 ppt로 작성)
+. 화면은 자유롭게 구성한다.
+. JAVA 언어 / mySQL 또는 Oracle DB 기반으로 작성한다.
+. <필수 기본과제>를 구현한 후, 시간이 되면 <추가기능 요구사항>을 취사 선택하여 구현한다.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+    < 필수 기본과제 >
+    - 테이블 리스트 형태의 기본적인 게시판을 제작한다.
+    - 글을 추가, 수정하기 위한 편집 화면을 제작한다.
+    - 신규 글 작성, 작성한 글 수정 및 제거가 가능해야 한다.
+    - 페이징이 가능해야 한다.
 
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+    < 추가기능 요구사항 >
+    (추가기능은 자신의 능력 범위 내에서 취사 선택하여 구현한다.)
+    - 계정제 운영.
+    	+ 로그인 후 글을 작성할 수 있다.
+    	+ 자신의 글만 수정, 삭제가 가능.
+    - 계정에 따른 권한 차등 부여
+    	+ 관리자의 권한을 별도로 부여한다.
+    	+ 친구만 볼 수 있는 글을 작성할 수 있다.
+    - 본문글에 이미지 추가
+    	+ 본문 글에 이미지를 삽입할 수 있다.
+    	+ 이미지 위치를 자유롭게 정할 수 있다.
+    	+ 이미지가 있는 글은 게시판 리스트에도 이미지를 노출시킬 수 있다.
+    - 본문 하단에 리플 기능 추가
+    	+ 리플라이 작성이 가능하다.
+    	+ 리플의 리플 작성이 가능하다.
+    	+ 계정제 가능시 자신이 작성한 리플만 수정,삭제 가능해야 한다.
+    - 게시물 정렬 기능 추가
+    - 게시물 검색 기능 추가
+# border-front
