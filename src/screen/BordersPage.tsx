@@ -1,20 +1,16 @@
 import React, { useEffect, useState } from "react";
-import { deleteBorder, getAllBorders } from "../api";
-import styled from "styled-components";
 import {
-  Link,
-  Route,
-  Routes,
-  useLocation,
-  useNavigate,
-} from "react-router-dom";
+  deleteBorder,
+  getAllBorders,
+  getBordersByKeyword,
+  updateBorder,
+} from "../api";
+import styled from "styled-components";
+import { Link, useLocation, useMatch, useNavigate } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import { usernameAtom } from "../state/userAtom";
 import { useForm } from "react-hook-form";
-import { BORDER_PATH } from "./BorderPage";
-import { Router } from "express";
-import CreatePost, { CREATE_BORDER_PATH, ICreateBorder } from "./CreateBorder";
-import { baseButtonColor } from "../pallet";
+import { ICreateBorder } from "./CreateBorder";
 import BorderForm from "../components/border/BorderForm";
 import BorderButton from "../components/border/BorderButton";
 import BorderTextArea from "../components/border/BorderTextArea";
@@ -22,7 +18,11 @@ import BorderTextArea from "../components/border/BorderTextArea";
 interface IBorderProps {
   path: string;
 }
-
+interface IStateProps {
+  state: {
+    keyword: string;
+  };
+}
 const Tmp = styled.div`
   display: flex;
   align-items: end;
@@ -69,21 +69,26 @@ const HidenForm = styled.div<{ isClick?: boolean }>`
 const BordersPage = ({ path }: IBorderProps) => {
   const [borders, setBorders] = useState<IBorder[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const username = useRecoilValue(usernameAtom);
   const [tmp, setTmp] = useState(-1);
   const { register, handleSubmit } = useForm<ICreateBorder>();
-
+  const username = useRecoilValue(usernameAtom);
+  const location = useLocation() as IStateProps;
   const nav = useNavigate();
 
-  const loadBorders = async () => {
-    setBorders(await getAllBorders(path));
-    setIsLoading(false);
-  };
   useEffect(() => {
-    console.log(borders);
     loadBorders();
   }, [path]);
 
+  const loadBorders = async () => {
+    console.log("asd");
+
+    if (path == "search") {
+      setBorders(await getBordersByKeyword(location.state.keyword));
+    } else {
+      setBorders(await getAllBorders(path));
+    }
+    setIsLoading(false);
+  };
   const onClick = async (
     event: React.FormEvent<HTMLButtonElement>,
     id: number,
@@ -96,32 +101,44 @@ const BordersPage = ({ path }: IBorderProps) => {
     switch (value) {
       case "delete":
         await deleteBorder(id);
-        nav(BORDER_PATH);
+        nav(0);
+        break;
+      case "update":
+        setTmp((prev) => {
+          if (prev === index!) {
+            return -1;
+          }
+          return index!;
+        });
         break;
 
-      case "update":
-        setTmp(index!);
-        break;
       default:
         return;
     }
   };
 
-  const onUpdadeSubmit = (data: ICreateBorder) => {
-    console.log(data);
-  };
-  const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    console.log("asdasd");
+  const onUpdadeSubmit = async (data: any, id: number) => {
+    const newData = {} as any;
+    Object.entries(data).map((d) => {
+      if (d[0].includes(String(id))) {
+        newData[d[0].split("-")[0]] = d[1];
+      }
+    });
+    console.log(newData);
+
+    await updateBorder(newData, id);
+    nav(0);
   };
 
   return (
     <div>
       {isLoading ? (
-        <span>Loaindg...</span>
+        <span>로딩중... 혹은 검색한 게시판이 존재하지 않습니다...</span>
       ) : (
         borders.map((border, index) => {
-          console.log(border.category);
+          const titleRef = `title-${border.id}`;
+          const contentRef = `content-${border.id}`;
+          const cagetoryRef = `category-${border.id}`;
 
           return (
             <div key={border.id}>
@@ -134,7 +151,7 @@ const BordersPage = ({ path }: IBorderProps) => {
                   <Tmp>
                     <Username>작성자: {border.name}</Username>
                     {username === border.email ? (
-                      <form onSubmit={onSubmit}>
+                      <div>
                         <button
                           value="update"
                           onClick={(event) => onClick(event, border.id, index)}
@@ -147,32 +164,37 @@ const BordersPage = ({ path }: IBorderProps) => {
                         >
                           Delete
                         </button>
-                      </form>
+                      </div>
                     ) : null}
                   </Tmp>
                 </MetaData>
               </Border>
               {username === border.email ? (
                 <HidenForm isClick={index === tmp}>
-                  <BorderForm onSubmit={handleSubmit(onUpdadeSubmit)}>
+                  <BorderForm
+                    onSubmit={handleSubmit((data) =>
+                      onUpdadeSubmit(data, border.id)
+                    )}
+                  >
                     <Select
-                      {...register("category", { value: border.category })}
-                      defaultValue={border.category}
+                      {...register(cagetoryRef as any, {
+                        value: border.category,
+                      })}
                     >
                       <option value="category" disabled>
                         カテゴリーを選んでください。
                       </option>
-                      <option value={"日本語授業"}>IT授業</option>
+                      <option value={"日本語授業"}>日本語授業</option>
                       <option value={"IT授業"}>IT授業</option>
                     </Select>
                     <input
-                      {...register("title", {
+                      {...register(titleRef as any, {
                         value: border.title,
                       })}
                       placeholder="title"
                     />
                     <BorderTextArea
-                      {...register("content", {
+                      {...register(contentRef as any, {
                         value: border.content,
                       })}
                       placeholder="content"

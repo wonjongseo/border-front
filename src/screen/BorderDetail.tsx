@@ -1,8 +1,11 @@
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { IBorder } from "./BordersPage";
 import styled from "styled-components";
 import { useRecoilValue } from "recoil";
 import { usernameAtom } from "../state/userAtom";
+import { sleep } from "react-query/types/core/utils";
+import { deleteBorder } from "../api";
+import { useState } from "react";
 export const BORDER_DETAIL_PATH = "/border-detail/:id";
 
 interface IBorderState {
@@ -30,36 +33,41 @@ const CreateAt = styled.div`
   font-size: 10px;
 `;
 const Username = styled.div`
+  margin-top: 200px;
   font-size: 18px;
   font-weight: 700;
   margin-bottom: 10px;
 `;
 
 const Title = styled.div`
-  font-size: 40px;
-  letter-spacing: 8px;
+  font-size: 45px;
+  font-weight: 600;
+  letter-spacing: 6px;
+`;
+
+const Category = styled.div`
+  font-size: 14px;
+  margin: 10px 0;
 `;
 
 const Content = styled.div`
-  background-color: 100;
+  margin-top: 50px;
+  font-size: 20px;
 `;
 const BorderDetail = () => {
-  const username = useRecoilValue(usernameAtom);
-
   const {
     state: { border },
   } = useLocation() as IBorderState;
 
   return (
     <Container>
-      <MetaData id="meta">
+      <Title>{border.title.replaceAll("\n", "<br/>")}</Title>
+      <Category> {border.category} </Category>
+      <Content> {border.content}</Content>
+      <MetaData>
         <Username>{border.name}</Username>
         <CreateAt>{border.createdAt}</CreateAt>
       </MetaData>
-      <Title id="title">{border.title.replaceAll("\n", "<br/>")}</Title>
-      <div id="category"> {border.category} </div>
-      <div id="content"> {border.content}</div>
-      {username === border.email ? <div>IsMy</div> : null}
     </Container>
   );
 };

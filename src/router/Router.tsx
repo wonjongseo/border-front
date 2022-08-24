@@ -6,6 +6,7 @@ import Header from "../components/Header";
 import Join, { JOIN_PATH } from "../screen/Join";
 import Logout, { LOGOUT_PATH } from "../screen/Logout";
 import BorderDetail, { BORDER_DETAIL_PATH } from "../screen/BorderDetail";
+import BordersPage from "../screen/BordersPage";
 function CRouter() {
   return (
     <>

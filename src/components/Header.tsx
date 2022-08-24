@@ -8,7 +8,8 @@ import { usernameAtom } from "../state/userAtom";
 
 const HeaderContainer = styled.header`
   height: 10vh;
-  padding: 20px;
+  width: 600px;
+  margin: 30px auto 0 auto;
 `;
 
 const Items = styled.ul`

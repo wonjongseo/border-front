@@ -12,7 +12,7 @@ import { JOIN_PATH } from "./Join";
 
 const Container = styled.div`
   display: flex;
-  height: 100vh;
+  height: 80vh;
   justify-content: center;
   flex-direction: column;
   align-items: center;
@@ -37,18 +37,30 @@ function Login() {
   const location = useLocation() as LocationState;
   console.log(location);
 
-  const { register, handleSubmit } = useForm<ILoginInfo>();
+  const { register, handleSubmit, formState, setError } = useForm<ILoginInfo>();
 
   const [username, setUsername] = useRecoilState(usernameAtom);
 
   const onValid = async (data: ILoginInfo) => {
-    const response = await postUserLogin(data);
-    setUsername(response.data);
-    nav(HOME_PATH);
+    try {
+      const response = await postUserLogin(data);
+      setUsername(response.data);
+      sessionStorage.setItem("username", data.email);
+
+      nav(HOME_PATH, { state: { username: response.data } });
+    } catch (e) {
+      console.log(e);
+      setError("password", {
+        message: "회원 정보가 일치하지 않습니다",
+      });
+    }
   };
 
   return (
     <Container>
+      <div style={{ marginBottom: "20px" }}>
+        {formState.errors.password?.message}
+      </div>
       {location.state?.error == null ? null : (
         <span>{location.state?.error}</span>
       )}
@@ -60,6 +72,7 @@ function Login() {
           type={"text"}
         />
         <Input
+          value={location.state?.password}
           {...register("password")}
           placeholder="password"
           type={"password"}

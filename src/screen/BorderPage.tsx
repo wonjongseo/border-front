@@ -1,3 +1,4 @@
+import { keyboard } from "@testing-library/user-event/dist/keyboard";
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link, Route, Routes, useMatch, useNavigate } from "react-router-dom";
@@ -10,8 +11,13 @@ import { LOGIN_PATH } from "./Login";
 
 export const BORDER_PATH = "/border";
 
+const Categorys = styled.div`
+  display: flex;
+  justify-content: space-between;
+`;
+
 const Container = styled.div`
-  margin: 35px auto;
+  margin: 5px auto;
   max-width: 600px;
 `;
 
@@ -41,11 +47,11 @@ const Form = styled.form``;
 const CreateButtonBox = styled.div`
   padding-top: 10px;
   display: flex;
-  justify-content: end;
+  justify-content: space-between;
 `;
 const CreateButton = styled(Link)`
-  border-radius: 5px;
-  padding: 8px 10px;
+  border-radius: 10px;
+  padding: 12px;
   color: white;
   font-size: 12px;
   margin-bottom: 30px;
@@ -54,11 +60,10 @@ const CreateButton = styled(Link)`
     cursor: pointer;
   }
 `;
-enum POST_ENUM {
-  "CATEGORY",
-  "ALL",
-  "MY",
-}
+
+const Category = styled(CreateButton)<{ isClick?: boolean }>`
+  margin-right: 20px;
+`;
 
 const Input = styled.input``;
 
@@ -68,14 +73,19 @@ function BorderPage() {
   const isMyUrl = useMatch("/border/my");
   const nav = useNavigate();
   const usename = useRecoilValue(usernameAtom);
+
   useEffect(() => {
     if (isMyUrl != null && usename == null) {
       nav(LOGIN_PATH, { state: { error: "먼저 로그인을 해주세요" } });
     }
-  }, []);
+  }, [keyboard]);
 
-  const onValid = (event: { search?: string }) => {
-    console.log(event);
+  const onValid = (data: { keyword?: string }) => {
+    console.log("new");
+
+    const { keyword } = data;
+    console.log(keyword);
+    nav("search", { state: { keyword }, replace: true });
   };
   return (
     <Container>
@@ -87,30 +97,39 @@ function BorderPage() {
             </Item>
             {usename ? (
               <Item isClick={isMyUrl != null}>
-                <Link to="my">My Post</Link>
+                <Link to="my">My Posts</Link>
               </Item>
             ) : null}
           </Items>
         </NavItem>
         <NavItem>
           <Form onSubmit={handleSubmit(onValid)}>
-            <Input {...register("search")} placeholder="검색어를 입력하세요." />
+            <Input
+              {...register("keyword")}
+              placeholder="검색어를 입력하세요."
+            />
             <Input as="button">전송</Input>
           </Form>
         </NavItem>
       </Nav>
+
       <hr />
 
       <CreateButtonBox>
+        <Categorys>
+          <Category to={"japan"}>日本語授業</Category>
+          <Category to={"IT"}>IT授業</Category>
+        </Categorys>
         <CreateButton to="create">Create Post</CreateButton>
       </CreateButtonBox>
-
-      <div>categorys</div>
 
       <Routes>
         <Route path="create" element={<CreateBorder />} />
         <Route path="all" element={<BordersPage path="all" />} />
         <Route path="my" element={<BordersPage path="my" />} />
+        <Route path="japan" element={<BordersPage path="japan" />} />
+        <Route path="it" element={<BordersPage path="it" />} />
+        <Route path="search" element={<BordersPage path="search" />} />
       </Routes>
     </Container>
   );
